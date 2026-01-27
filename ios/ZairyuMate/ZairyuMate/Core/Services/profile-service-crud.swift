@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import WidgetKit
 
 /// Service for managing Profile entities
 @MainActor
@@ -162,6 +163,10 @@ class ProfileService {
     func update(_ profile: Profile) async throws {
         try persistenceController.save(context: viewContext)
 
+        // Sync widget data and reschedule notifications
+        syncWidgetData(for: profile)
+        await rescheduleNotifications(for: profile)
+
         #if DEBUG
         print("✅ Updated profile: \(profile.name)")
         #endif
@@ -263,6 +268,10 @@ class ProfileService {
 
         try persistenceController.save(context: viewContext)
 
+        // Sync widget with active profile and schedule notifications
+        syncWidgetData(for: profile)
+        await rescheduleNotifications(for: profile)
+
         #if DEBUG
         print("✅ Set active profile: \(profile.name)")
         #endif
@@ -283,5 +292,99 @@ class ProfileService {
     /// - Throws: Core Data fetch errors
     func hasProfiles() async throws -> Bool {
         return try await count() > 0
+    }
+
+    // MARK: - Widget & Notification Sync
+
+    /// Sync widget data with current active profile
+    /// - Parameter profile: Profile to sync to widget
+    private func syncWidgetData(for profile: Profile) {
+        guard let expiryDate = profile.cardExpiry else {
+            print("⚠️ Profile missing expiry date, clearing widget data")
+            SharedDataStore.clearWidgetData()
+            return
+        }
+
+        // Calculate days remaining
+        let calendar = Calendar.current
+        let now = calendar.startOfDay(for: Date())
+        let expiry = calendar.startOfDay(for: expiryDate)
+        let components = calendar.dateComponents([.day], from: now, to: expiry)
+        let daysRemaining = max(0, components.day ?? 0)
+
+        // Create widget data
+        let widgetData = WidgetData(
+            profileName: profile.name,
+            visaType: profile.visaType ?? "Visa",
+            expiryDate: expiryDate,
+            daysRemaining: daysRemaining
+        )
+
+        // Save to shared container
+        SharedDataStore.saveWidgetData(widgetData)
+
+        // Reload widget timelines
+        WidgetCenter.shared.reloadAllTimelines()
+
+        print("✅ Widget synced for \(profile.name) - \(daysRemaining) days remaining")
+    }
+
+    /// Reschedule notifications for profile
+    /// - Parameter profile: Profile to schedule notifications for
+    private func rescheduleNotifications(for profile: Profile) async {
+        guard let expiryDate = profile.cardExpiry else {
+            print("⚠️ Profile missing expiry date, skipping notification scheduling")
+            return
+        }
+
+        // Check notification permission and settings
+        let permissionStatus = await NotificationScheduler.shared.checkPermissionStatus()
+        guard permissionStatus == .authorized else {
+            print("⚠️ Notifications not authorized, skipping scheduling")
+            return
+        }
+
+        // Check if notifications are enabled in settings
+        let notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
+        guard notificationsEnabled else {
+            print("⚠️ Notifications disabled in settings, skipping scheduling")
+            return
+        }
+
+        // Cancel existing notifications
+        NotificationScheduler.shared.cancelAllNotifications()
+
+        // Load custom reminder days from settings
+        let reminderDaysData = UserDefaults.standard.data(forKey: "reminderDays")
+        var reminderDays = [90, 60, 30, 14, 7, 3, 1] // Default
+
+        if let data = reminderDaysData,
+           let decoded = try? JSONDecoder().decode([Int].self, from: data) {
+            reminderDays = decoded
+        }
+
+        // Schedule notifications
+        NotificationScheduler.shared.scheduleAllReminders(
+            expiryDate: expiryDate,
+            profileName: profile.name,
+            customDays: reminderDays
+        )
+
+        print("✅ Notifications rescheduled for \(profile.name)")
+    }
+
+    /// Sync widget with active profile on app launch
+    func syncWidgetOnLaunch() async {
+        do {
+            if let activeProfile = try await fetchActive() {
+                syncWidgetData(for: activeProfile)
+                print("✅ Widget synced on launch")
+            } else {
+                SharedDataStore.clearWidgetData()
+                print("⚠️ No active profile, widget data cleared")
+            }
+        } catch {
+            print("❌ Failed to sync widget on launch: \(error.localizedDescription)")
+        }
     }
 }

@@ -137,6 +137,34 @@ enum PrivacyConstants {
     static let cameraUsageDescription = "NSCameraUsageDescription"
 }
 
+// MARK: - In-App Purchase Constants
+
+enum IAPConstants {
+    /// Pro upgrade product ID (non-consumable)
+    static let proProductID = "com.zairyumate.pro"
+
+    /// All product IDs
+    static let productIDs: [String] = [proProductID]
+
+    // MARK: - User Defaults Keys
+
+    enum Keys {
+        /// Cached Pro status for offline access
+        static let isPro = "isPro"
+
+        /// Last purchase verification date
+        static let lastVerificationDate = "lastVerificationDate"
+    }
+
+    // MARK: - Feature Flags
+
+    /// Free tier watermark text
+    static let watermarkText = "Created with Zairyu Mate Free"
+
+    /// Max profiles for free tier
+    static let freeMaxProfiles = 1
+}
+
 // MARK: - Debug Constants
 
 #if DEBUG

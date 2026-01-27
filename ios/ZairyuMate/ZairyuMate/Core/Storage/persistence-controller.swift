@@ -92,6 +92,11 @@ class PersistenceController {
                 fatalError("Failed to retrieve persistent store description")
             }
 
+            // Enable CloudKit sync with private database
+            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
+                containerIdentifier: "iCloud.com.zairyumate.app"
+            )
+
             // Enable persistent history tracking for CloudKit sync
             description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
             description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
@@ -145,5 +150,13 @@ class PersistenceController {
             #endif
             throw error
         }
+    }
+
+    /// Check if CloudKit sync is enabled
+    var isCloudSyncEnabled: Bool {
+        guard let description = container.persistentStoreDescriptions.first else {
+            return false
+        }
+        return description.cloudKitContainerOptions != nil
     }
 }

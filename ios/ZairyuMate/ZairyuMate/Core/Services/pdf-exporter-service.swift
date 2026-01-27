@@ -21,11 +21,12 @@ class PDFExporter {
     func export(
         _ document: PDFDocument,
         filename: String,
-        flatten: Bool = true
+        flatten: Bool = true,
+        addWatermark: Bool = false
     ) async throws -> URL {
         #if DEBUG
         let startTime = Date()
-        print("📤 Exporting PDF (flatten: \(flatten))")
+        print("📤 Exporting PDF (flatten: \(flatten), watermark: \(addWatermark))")
         #endif
 
         // Create temporary file URL
@@ -35,6 +36,11 @@ class PDFExporter {
 
         // Remove existing file if present
         try? FileManager.default.removeItem(at: tempURL)
+
+        // Add watermark if needed (before flattening)
+        if addWatermark {
+            applyWatermark(to: document)
+        }
 
         if flatten {
             // Flatten: render to new PDF (makes fields non-editable)
@@ -107,6 +113,14 @@ class PDFExporter {
         }
 
         return flattenedDocument
+    }
+
+    // MARK: - Watermark
+
+    /// Apply watermark to PDF document for free tier
+    private func applyWatermark(to document: PDFDocument) {
+        let watermark = PDFWatermarkOverlay()
+        watermark.apply(to: document)
     }
 
     // MARK: - Cleanup
