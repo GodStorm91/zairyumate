@@ -1,0 +1,108 @@
+# SwiftLint Configuration for Zairyu Mate
+# Code quality and style enforcement
+
+# Disabled rules (too strict for this project)
+disabled_rules:
+  - line_length              # Allow longer lines for readability
+  - trailing_whitespace      # Not critical
+  - type_body_length         # Some view models may be large
+  - file_length              # Allow longer files for complex features
+
+# Opt-in rules (additional quality checks)
+opt_in_rules:
+  - empty_count              # Use isEmpty instead of count == 0
+  - empty_string             # Use isEmpty instead of == ""
+  - force_unwrapping         # Warn on force unwrapping (!)
+  - explicit_init            # Avoid explicit .init()
+  - redundant_optional_initialization  # Avoid = nil for optionals
+
+# Excluded paths
+excluded:
+  - Pods
+  - .build
+  - DerivedData
+  - .swiftpm
+  - "**/Generated"
+
+# File name rules
+file_name:
+  excluded:
+    - AppDelegate.swift
+    - SceneDelegate.swift
+
+# Line length (warning only, not error)
+line_length:
+  warning: 120
+  error: 200
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_urls: true
+
+# Function length
+function_body_length:
+  warning: 50
+  error: 100
+
+# Type length
+type_body_length:
+  warning: 300
+  error: 500
+
+# Cyclomatic complexity
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+# Nesting depth
+nesting:
+  type_level:
+    warning: 2
+  statement_level:
+    warning: 5
+
+# Identifier naming
+identifier_name:
+  min_length:
+    warning: 2
+  max_length:
+    warning: 50
+  excluded:
+    - id
+    - i
+    - j
+    - x
+    - y
+    - z
+
+# Force cast and try
+force_cast: warning
+force_try: warning
+
+# Trailing comma (enforce)
+trailing_comma:
+  mandatory_comma: true
+
+# Custom rules
+custom_rules:
+  # Ensure Observable macro is used for iOS 17+
+  no_observable_object:
+    name: "Use @Observable instead of ObservableObject"
+    regex: "class\\s+\\w+\\s*:\\s*.*ObservableObject"
+    message: "Use @Observable macro (iOS 17+) instead of ObservableObject protocol"
+    severity: warning
+
+  # Ensure color theme is used
+  hardcoded_colors:
+    name: "Use Color Theme"
+    regex: "Color\\.(red|blue|green|yellow|orange|purple|pink|gray|black|white)(?!\\s*\\.opacity)"
+    message: "Use Color.zm* theme colors instead of hardcoded system colors"
+    severity: warning
+
+  # Ensure spacing constants are used
+  hardcoded_spacing:
+    name: "Use Spacing Constants"
+    regex: "\\.padding\\((8|12|16|20|24|32|48)\\)"
+    message: "Use Spacing.* constants instead of hardcoded values"
+    severity: warning
+
+reporter: "xcode"

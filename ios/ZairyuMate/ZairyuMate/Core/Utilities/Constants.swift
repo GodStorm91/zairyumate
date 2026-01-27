@@ -1,0 +1,153 @@
+//
+//  Constants.swift
+//  ZairyuMate
+//
+//  App-wide constants and configuration values
+//
+
+import Foundation
+
+// MARK: - App Constants
+
+enum AppConstants {
+    /// App name
+    static let appName = "Zairyu Mate"
+
+    /// Bundle identifier
+    static let bundleIdentifier = "com.zairyumate.app"
+
+    /// App version
+    static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+
+    /// Build number
+    static let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+
+    /// Minimum iOS version supported
+    static let minimumIOSVersion = "17.0"
+}
+
+// MARK: - API Constants
+
+enum APIConstants {
+    /// Base URL for any future API endpoints (currently unused - offline first)
+    static let baseURL = "https://api.zairyumate.com"
+
+    /// API timeout interval
+    static let timeoutInterval: TimeInterval = 30
+}
+
+// MARK: - NFC Constants
+
+enum NFCConstants {
+    /// NFC session timeout
+    static let sessionTimeout: TimeInterval = 60
+
+    /// Zairyu card NFC system code
+    static let zairyuCardSystemCode = "FE00"
+
+    /// Polling tag types
+    static let pollingTagTypes = ["FeliCa"]
+}
+
+// MARK: - Storage Constants
+
+enum StorageConstants {
+    /// User defaults suite name
+    static let userDefaultsSuite = "com.zairyumate.app"
+
+    /// Keychain service identifier
+    static let keychainService = "com.zairyumate.app.keychain"
+
+    /// iCloud container identifier
+    static let iCloudContainerID = "iCloud.com.zairyumate.app"
+
+    // MARK: - User Defaults Keys
+
+    enum Keys {
+        static let hasCompletedOnboarding = "hasCompletedOnboarding"
+        static let preferredLanguage = "preferredLanguage"
+        static let biometricAuthEnabled = "biometricAuthEnabled"
+        static let notificationsEnabled = "notificationsEnabled"
+        static let lastSyncDate = "lastSyncDate"
+    }
+}
+
+// MARK: - Notification Constants
+
+enum NotificationConstants {
+    /// Visa expiration reminder notification ID
+    static let visaExpirationReminderID = "visa.expiration.reminder"
+
+    /// Document preparation reminder notification ID
+    static let documentPreparationReminderID = "document.preparation.reminder"
+
+    /// Timeline task notification ID prefix
+    static let timelineTaskNotificationPrefix = "timeline.task."
+
+    // MARK: - Reminder Intervals (days before expiration)
+
+    /// 3 months before expiration
+    static let firstReminderDays = 90
+
+    /// 1 month before expiration
+    static let secondReminderDays = 30
+
+    /// 2 weeks before expiration
+    static let thirdReminderDays = 14
+
+    /// 1 week before expiration
+    static let finalReminderDays = 7
+}
+
+// MARK: - Form Constants
+
+enum FormConstants {
+    /// Maximum file size for PDF export (in bytes) - 10MB
+    static let maxPDFFileSize: Int = 10 * 1024 * 1024
+
+    /// Supported form types
+    enum FormType: String, CaseIterable {
+        case extension = "extension"
+        case changeOfStatus = "change_of_status"
+        case permanentResidence = "permanent_residence"
+
+        var displayName: String {
+            switch self {
+            case .extension:
+                return "Extension of Period of Stay"
+            case .changeOfStatus:
+                return "Change of Status of Residence"
+            case .permanentResidence:
+                return "Permanent Residence (Eijuu)"
+            }
+        }
+    }
+}
+
+// MARK: - Privacy Constants
+
+enum PrivacyConstants {
+    /// NFC reader usage description key
+    static let nfcUsageDescription = "NFCReaderUsageDescription"
+
+    /// Face ID usage description key
+    static let faceIDUsageDescription = "NSFaceIDUsageDescription"
+
+    /// Camera usage description key
+    static let cameraUsageDescription = "NSCameraUsageDescription"
+}
+
+// MARK: - Debug Constants
+
+#if DEBUG
+enum DebugConstants {
+    /// Enable verbose logging
+    static let verboseLogging = true
+
+    /// Enable NFC simulation (for testing without real card)
+    static let enableNFCSimulation = false
+
+    /// Simulated scan delay (seconds)
+    static let simulatedScanDelay: TimeInterval = 2
+}
+#endif
