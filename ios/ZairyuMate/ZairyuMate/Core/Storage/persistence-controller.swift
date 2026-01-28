@@ -10,12 +10,12 @@ import CoreData
 import Foundation
 
 /// Core Data persistence controller with CloudKit integration
-class PersistenceController {
+class PersistenceController: ObservableObject {
     /// Shared singleton instance for production use
     static let shared = PersistenceController()
 
     /// Flag indicating if store loaded successfully
-    private(set) var isStoreLoaded = false
+    @Published private(set) var isStoreLoaded = false
 
     /// Preview instance with in-memory store and mock data for SwiftUI previews
     static var preview: PersistenceController = {
@@ -99,7 +99,7 @@ class PersistenceController {
             #if !targetEnvironment(simulator)
             // Enable CloudKit sync with private database (device only)
             description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
-                containerIdentifier: "iCloud.com.zairyumate.app"
+                containerIdentifier: "iCloud.com.khanhnguyenhoangviet.zairyumate"
             )
             #endif
 
@@ -113,33 +113,26 @@ class PersistenceController {
             #endif
         }
 
-        // Load persistent stores synchronously using semaphore
-        let semaphore = DispatchSemaphore(value: 0)
-        var loadError: NSError?
-
+        // Load persistent stores asynchronously (non-blocking)
         container.loadPersistentStores { [weak self] storeDescription, error in
-            if let error = error as NSError? {
-                loadError = error
-                #if DEBUG
-                print("❌ Core Data store failed to load: \(error), \(error.userInfo)")
-                #endif
-            } else {
-                self?.isStoreLoaded = true
-                #if DEBUG
-                print("✅ Core Data store loaded: \(storeDescription.url?.lastPathComponent ?? "unknown")")
-                #endif
+            DispatchQueue.main.async {
+                if let error = error as NSError? {
+                    #if DEBUG
+                    print("❌ Core Data store failed to load: \(error), \(error.userInfo)")
+                    #endif
+
+                    // In release, crash after showing error
+                    #if !DEBUG
+                    fatalError("Core Data store failed to load: \(error), \(error.userInfo)")
+                    #endif
+                } else {
+                    self?.isStoreLoaded = true
+                    #if DEBUG
+                    print("✅ Core Data store loaded: \(storeDescription.url?.lastPathComponent ?? "unknown")")
+                    #endif
+                }
             }
-            semaphore.signal()
         }
-
-        semaphore.wait()
-
-        // If load failed in release, crash
-        #if !DEBUG
-        if let error = loadError {
-            fatalError("Core Data store failed to load: \(error), \(error.userInfo)")
-        }
-        #endif
 
         // Automatically merge changes from parent context
         container.viewContext.automaticallyMergesChangesFromParent = true

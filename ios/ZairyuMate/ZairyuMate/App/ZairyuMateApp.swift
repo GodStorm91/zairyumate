@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct ZairyuMateApp: App {
     // Initialize Core Data persistence controller
-    let persistenceController = PersistenceController.shared
+    @StateObject private var persistenceController = PersistenceController.shared
 
     // Initialize app lock manager
     @State private var lockManager = AppLockManager()
@@ -29,38 +29,56 @@ struct ZairyuMateApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                HomeScreenView()
-                    .environment(\.managedObjectContext, persistenceController.viewContext)
-                    .environment(syncManager)
-                    .environment(icloudMonitor)
+            // Show loading screen until Core Data store is ready
+            if persistenceController.isStoreLoaded {
+                ZStack {
+                    HomeScreenView()
+                        .environment(\.managedObjectContext, persistenceController.viewContext)
+                        .environment(syncManager)
+                        .environment(icloudMonitor)
 
-                // Lock screen overlay
-                if lockManager.isLocked {
-                    LockScreenView(lockManager: lockManager)
-                        .transition(.opacity)
-                        .zIndex(999)
+                    // Lock screen overlay
+                    if lockManager.isLocked {
+                        LockScreenView(lockManager: lockManager)
+                            .transition(.opacity)
+                            .zIndex(999)
+                    }
                 }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                lockManager.appDidEnterBackground()
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                // Get biometric enabled setting from Core Data
-                let context = persistenceController.viewContext
-                let settings = AppSettings.shared(in: context)
-                lockManager.appWillEnterForeground(biometricEnabled: settings.biometricEnabled)
-            }
-            .onAppear {
-                // Check lock state on app launch
-                let context = persistenceController.viewContext
-                let settings = AppSettings.shared(in: context)
-                lockManager.checkLockState(biometricEnabled: settings.biometricEnabled)
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                    lockManager.appDidEnterBackground()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                    // Get biometric enabled setting from Core Data
+                    let context = persistenceController.viewContext
+                    let settings = AppSettings.shared(in: context)
+                    lockManager.appWillEnterForeground(biometricEnabled: settings.biometricEnabled)
+                }
+                .onAppear {
+                    // Check lock state on app launch
+                    let context = persistenceController.viewContext
+                    let settings = AppSettings.shared(in: context)
+                    lockManager.checkLockState(biometricEnabled: settings.biometricEnabled)
 
-                // Sync widget data on app launch
-                Task {
-                    let profileService = ProfileService(persistenceController: persistenceController)
-                    await profileService.syncWidgetOnLaunch()
+                    // Sync widget data on app launch
+                    Task {
+                        let profileService = ProfileService(persistenceController: persistenceController)
+                        await profileService.syncWidgetOnLaunch()
+                    }
+                }
+            } else {
+                // Loading screen while Core Data initializes (especially CloudKit on device)
+                ZStack {
+                    Color(uiColor: UIColor.systemBackground)
+                        .ignoresSafeArea()
+
+                    VStack(spacing: 24) {
+                        ProgressView()
+                            .scaleEffect(1.5)
+
+                        Text("Loading...")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
         }
