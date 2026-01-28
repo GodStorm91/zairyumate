@@ -14,7 +14,7 @@ enum AppConstants {
     static let appName = "Zairyu Mate"
 
     /// Bundle identifier
-    static let bundleIdentifier = "com.zairyumate.app"
+    static let bundleIdentifier = "com.khanhnguyenhoangviet.zairyumate"
 
     /// App version
     static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -61,13 +61,13 @@ enum NFCConstants {
 
 enum StorageConstants {
     /// User defaults suite name
-    static let userDefaultsSuite = "com.zairyumate.app"
+    static let userDefaultsSuite = "com.khanhnguyenhoangviet.zairyumate"
 
     /// Keychain service identifier
-    static let keychainService = "com.zairyumate.app.keychain"
+    static let keychainService = "com.khanhnguyenhoangviet.zairyumate.keychain"
 
     /// iCloud container identifier
-    static let iCloudContainerID = "iCloud.com.zairyumate.app"
+    static let iCloudContainerID = "iCloud.com.khanhnguyenhoangviet.zairyumate"
 
     // MARK: - User Defaults Keys
 
@@ -149,7 +149,7 @@ enum PrivacyConstants {
 
 enum IAPConstants {
     /// Pro upgrade product ID (non-consumable)
-    static let proProductID = "com.zairyumate.pro"
+    static let proProductID = "com.khanhnguyenhoangviet.zairyumate.pro"
 
     /// All product IDs
     static let productIDs: [String] = [proProductID]

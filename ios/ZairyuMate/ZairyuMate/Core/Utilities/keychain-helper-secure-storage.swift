@@ -23,7 +23,7 @@ enum KeychainError: Error {
 enum KeychainHelper {
 
     /// Service identifier for Keychain items
-    private static let service = "com.zairyumate.secure"
+    private static let service = "com.khanhnguyenhoangviet.zairyumate.secure"
 
     // MARK: - Save Operations
 

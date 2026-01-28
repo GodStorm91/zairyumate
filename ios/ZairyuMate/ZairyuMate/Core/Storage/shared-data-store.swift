@@ -28,7 +28,7 @@ struct WidgetData: Codable {
 /// Shared data store using App Groups for main app and widget communication
 class SharedDataStore {
     // IMPORTANT: This must match the App Group identifier in entitlements
-    static let appGroup = "group.com.zairyumate.app"
+    static let appGroup = "group.com.khanhnguyenhoangviet.zairyumate"
 
     private static let widgetDataKey = "widgetData"
 
