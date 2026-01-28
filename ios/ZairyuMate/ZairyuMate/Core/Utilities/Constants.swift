@@ -107,7 +107,7 @@ enum FormConstants {
 
     /// Supported form types
     enum FormType: String, CaseIterable {
-        case extension = "extension"
+        case `extension` = "extension"
         case changeOfStatus = "change_of_status"
         case permanentResidence = "permanent_residence"
 

@@ -57,12 +57,20 @@ class HomeViewModel {
 
     // MARK: - Initialization
 
-    init(
-        profileService: ProfileService = ProfileService(),
-        timelineService: TimelineEventService = TimelineEventService()
+    nonisolated init(
+        profileService: ProfileService,
+        timelineService: TimelineEventService
     ) {
         self.profileService = profileService
         self.timelineService = timelineService
+    }
+
+    /// Convenience initializer with default services
+    convenience init() {
+        self.init(
+            profileService: ProfileService(),
+            timelineService: TimelineEventService()
+        )
     }
 
     // MARK: - Data Loading
@@ -83,10 +91,12 @@ class HomeViewModel {
 
             // Fetch upcoming events for active profile
             if let profile = activeProfile {
-                upcomingEvents = try await timelineService.fetch(for: profile)
-                    .filter { !$0.isCompleted && $0.eventDate >= Date() }
+                let allEvents = try await timelineService.fetch(for: profile)
+                upcomingEvents = allEvents
+                    .filter { !$0.isCompleted && ($0.eventDate ?? Date.distantPast) >= Date() }
+                    .sorted { ($0.eventDate ?? Date.distantPast) < ($1.eventDate ?? Date.distantPast) }
                     .prefix(5) // Show max 5 upcoming events
-                    .sorted { $0.eventDate < $1.eventDate }
+                    .map { $0 }
             } else {
                 upcomingEvents = []
             }
@@ -120,10 +130,12 @@ class HomeViewModel {
             activeProfile = profile
 
             // Reload events for new profile
-            upcomingEvents = try await timelineService.fetch(for: profile)
-                .filter { !$0.isCompleted && $0.eventDate >= Date() }
+            let allEvents = try await timelineService.fetch(for: profile)
+            upcomingEvents = allEvents
+                .filter { !$0.isCompleted && ($0.eventDate ?? Date.distantPast) >= Date() }
+                .sorted { ($0.eventDate ?? Date.distantPast) < ($1.eventDate ?? Date.distantPast) }
                 .prefix(5)
-                .sorted { $0.eventDate < $1.eventDate }
+                .map { $0 }
 
             #if DEBUG
             print("✅ Switched to profile: \(profile.name)")

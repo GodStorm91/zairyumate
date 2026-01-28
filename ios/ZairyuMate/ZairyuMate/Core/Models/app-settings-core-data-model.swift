@@ -18,6 +18,18 @@ public class AppSettings: NSManagedObject {
     /// - Parameter context: Managed object context
     /// - Returns: The app settings instance
     static func shared(in context: NSManagedObjectContext) -> AppSettings {
+        // Check if store is loaded before attempting fetch/create
+        guard PersistenceController.shared.isStoreLoaded else {
+            print("⚠️ CoreData store not loaded - returning unsaved settings")
+            let settings = AppSettings(context: context)
+            settings.id = UUID()
+            settings.biometricEnabled = false
+            settings.selectedLanguage = "vi"
+            settings.isPro = false
+            settings.lastSyncDate = nil
+            return settings
+        }
+
         let request = fetchRequest()
         request.fetchLimit = 1
 

@@ -32,13 +32,13 @@ class CloudSyncManager {
     private let container: NSPersistentCloudKitContainer
 
     /// Remote change notification observer
-    private var remoteChangeObserver: NSObjectProtocol?
+    private nonisolated(unsafe) var remoteChangeObserver: NSObjectProtocol?
 
     /// Import notification observer
-    private var importObserver: NSObjectProtocol?
+    private nonisolated(unsafe) var importObserver: NSObjectProtocol?
 
     /// Export notification observer
-    private var exportObserver: NSObjectProtocol?
+    private nonisolated(unsafe) var exportObserver: NSObjectProtocol?
 
     init(container: NSPersistentCloudKitContainer) {
         self.container = container
@@ -61,7 +61,7 @@ class CloudSyncManager {
     private func setupSyncObservers() {
         // Observe remote changes
         remoteChangeObserver = NotificationCenter.default.addObserver(
-            forName: NSPersistentStoreRemoteChange.self,
+            forName: .NSPersistentStoreRemoteChange,
             object: container.persistentStoreCoordinator,
             queue: .main
         ) { [weak self] _ in

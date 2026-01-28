@@ -17,7 +17,7 @@ class FormFillViewModel {
     // MARK: - State
 
     var filledDocument: PDFDocument?
-    var exportedURL: URL?
+    nonisolated(unsafe) var exportedURL: URL?
     var isLoading: Bool = false
     var errorMessage: String?
 

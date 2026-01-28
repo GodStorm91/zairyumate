@@ -43,19 +43,19 @@ struct HomeEmptyStateView: View {
 
             // Features List
             VStack(alignment: .leading, spacing: Spacing.md) {
-                FeatureRow(
+                OnboardingFeatureRow(
                     icon: "creditcard.fill",
                     title: "Virtual Zairyu Card",
                     description: "Keep your residence card info secure and accessible"
                 )
 
-                FeatureRow(
+                OnboardingFeatureRow(
                     icon: "bell.fill",
                     title: "Renewal Reminders",
                     description: "Never miss important visa deadlines"
                 )
 
-                FeatureRow(
+                OnboardingFeatureRow(
                     icon: "doc.text.fill",
                     title: "Document Management",
                     description: "Store and organize important documents"
@@ -90,7 +90,7 @@ struct HomeEmptyStateView: View {
 
 // MARK: - Feature Row
 
-struct FeatureRow: View {
+private struct OnboardingFeatureRow: View {
     let icon: String
     let title: String
     let description: String

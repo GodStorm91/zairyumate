@@ -36,7 +36,7 @@ class StoreManager {
     // MARK: - Private Properties
 
     /// Transaction update listener task
-    private var updateListenerTask: Task<Void, Error>?
+    nonisolated(unsafe) private var updateListenerTask: Task<Void, Error>?
 
     // MARK: - Initialization
 

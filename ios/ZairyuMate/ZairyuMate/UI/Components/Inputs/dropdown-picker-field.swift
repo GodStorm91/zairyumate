@@ -71,21 +71,21 @@ struct DropdownPickerField<T: Hashable & Identifiable>: View {
 // MARK: - Preview Models
 
 #if DEBUG
-struct VisaType: Identifiable, Hashable {
+struct PreviewVisaType: Identifiable, Hashable {
     let id: String
     let name: String
 }
 
 #Preview("Visa Type Picker") {
     struct PreviewWrapper: View {
-        @State private var selectedVisa: VisaType? = nil
+        @State private var selectedVisa: PreviewVisaType? = nil
 
         let visaTypes = [
-            VisaType(id: "work", name: "就労"),
-            VisaType(id: "study", name: "留学"),
-            VisaType(id: "dependent", name: "家族滞在"),
-            VisaType(id: "permanent", name: "永住者"),
-            VisaType(id: "spouse", name: "配偶者")
+            PreviewVisaType(id: "work", name: "就労"),
+            PreviewVisaType(id: "study", name: "留学"),
+            PreviewVisaType(id: "dependent", name: "家族滞在"),
+            PreviewVisaType(id: "permanent", name: "永住者"),
+            PreviewVisaType(id: "spouse", name: "配偶者")
         ]
 
         var body: some View {
@@ -114,12 +114,12 @@ struct VisaType: Identifiable, Hashable {
 
 #Preview("With Selection") {
     struct PreviewWrapper: View {
-        @State private var selectedVisa: VisaType? = VisaType(id: "work", name: "就労")
+        @State private var selectedVisa: PreviewVisaType? = PreviewVisaType(id: "work", name: "就労")
 
         let visaTypes = [
-            VisaType(id: "work", name: "就労"),
-            VisaType(id: "study", name: "留学"),
-            VisaType(id: "dependent", name: "家族滞在")
+            PreviewVisaType(id: "work", name: "就労"),
+            PreviewVisaType(id: "study", name: "留学"),
+            PreviewVisaType(id: "dependent", name: "家族滞在")
         ]
 
         var body: some View {
@@ -142,12 +142,12 @@ struct VisaType: Identifiable, Hashable {
 
 #Preview("Dark Mode") {
     struct PreviewWrapper: View {
-        @State private var selectedVisa: VisaType? = nil
+        @State private var selectedVisa: PreviewVisaType? = nil
 
         let visaTypes = [
-            VisaType(id: "work", name: "就労"),
-            VisaType(id: "study", name: "留学"),
-            VisaType(id: "dependent", name: "家族滞在")
+            PreviewVisaType(id: "work", name: "就労"),
+            PreviewVisaType(id: "study", name: "留学"),
+            PreviewVisaType(id: "dependent", name: "家族滞在")
         ]
 
         var body: some View {

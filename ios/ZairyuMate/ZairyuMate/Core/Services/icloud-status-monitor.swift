@@ -23,7 +23,7 @@ class iCloudStatusMonitor {
     var errorMessage: String?
 
     /// Notification observer token
-    private var accountChangeObserver: NSObjectProtocol?
+    private nonisolated(unsafe) var accountChangeObserver: NSObjectProtocol?
 
     init() {
         checkAccountStatus()

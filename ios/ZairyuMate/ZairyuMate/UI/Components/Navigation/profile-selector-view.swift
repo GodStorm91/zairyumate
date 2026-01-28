@@ -43,19 +43,19 @@ struct ProfileSelectorView<T: Hashable & Identifiable>: View {
 // MARK: - Preview Models
 
 #if DEBUG
-struct Profile: Identifiable, Hashable {
+struct PreviewProfile: Identifiable, Hashable {
     let id: String
     let name: String
 }
 
 #Preview("Multiple Profiles") {
     struct PreviewWrapper: View {
-        @State private var selectedProfile: Profile?
+        @State private var selectedProfile: PreviewProfile?
 
         let profiles = [
-            Profile(id: "1", name: "山田太郎"),
-            Profile(id: "2", name: "田中花子"),
-            Profile(id: "3", name: "佐藤次郎")
+            PreviewProfile(id: "1", name: "山田太郎"),
+            PreviewProfile(id: "2", name: "田中花子"),
+            PreviewProfile(id: "3", name: "佐藤次郎")
         ]
 
         var body: some View {
@@ -85,11 +85,11 @@ struct Profile: Identifiable, Hashable {
 
 #Preview("Two Profiles") {
     struct PreviewWrapper: View {
-        @State private var selectedProfile: Profile?
+        @State private var selectedProfile: PreviewProfile?
 
         let profiles = [
-            Profile(id: "1", name: "Self"),
-            Profile(id: "2", name: "Spouse")
+            PreviewProfile(id: "1", name: "Self"),
+            PreviewProfile(id: "2", name: "Spouse")
         ]
 
         var body: some View {
@@ -113,10 +113,10 @@ struct Profile: Identifiable, Hashable {
 
 #Preview("Single Profile") {
     struct PreviewWrapper: View {
-        @State private var selectedProfile: Profile?
+        @State private var selectedProfile: PreviewProfile?
 
         let profiles = [
-            Profile(id: "1", name: "山田太郎")
+            PreviewProfile(id: "1", name: "山田太郎")
         ]
 
         var body: some View {
@@ -144,11 +144,11 @@ struct Profile: Identifiable, Hashable {
 
 #Preview("Dark Mode") {
     struct PreviewWrapper: View {
-        @State private var selectedProfile: Profile?
+        @State private var selectedProfile: PreviewProfile?
 
         let profiles = [
-            Profile(id: "1", name: "山田太郎"),
-            Profile(id: "2", name: "田中花子")
+            PreviewProfile(id: "1", name: "山田太郎"),
+            PreviewProfile(id: "2", name: "田中花子")
         ]
 
         var body: some View {

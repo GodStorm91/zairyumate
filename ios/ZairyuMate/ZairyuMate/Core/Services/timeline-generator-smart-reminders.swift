@@ -201,7 +201,7 @@ struct TimelineGenerator {
             break
         }
 
-        return events.sorted { $0.eventDate < $1.eventDate }
+        return events.sorted { ($0.eventDate ?? Date.distantFuture) < ($1.eventDate ?? Date.distantFuture) }
     }
 
     /// Create a timeline event entity

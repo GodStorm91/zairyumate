@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild:*)",
+      "Bash(xcode-select:*)",
+      "Bash(find:*)",
+      "Bash(ruby --version:*)",
+      "Bash(gem list:*)",
+      "Bash(python3:*)",
+      "Bash(tee:*)",
+      "Bash(ls:*)",
+      "Bash(plutil -lint:*)",
+      "Bash(wc:*)",
+      "Bash(chmod:*)",
+      "Bash(./simple_fix.sh)",
+      "Bash(gem install:*)",
+      "Bash(/Users/khanhnguyen/.gem/ruby/2.6.0/bin/ruby:*)",
+      "Bash(ruby -I $HOME/.gem/ruby/2.6.0/lib fix_with_xcodeproj.rb)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(xcrun simctl boot:*)",
+      "Bash(open:*)",
+      "Bash(xcrun simctl install:*)",
+      "Bash(xcrun simctl launch:*)",
+      "Bash(defaults read:*)",
+      "Bash(xcrun simctl erase:*)",
+      "Bash(xcrun simctl shutdown:*)",
+      "Bash(xcrun xctrace:*)",
+      "Bash(security find-identity:*)"
+    ]
+  }
+}

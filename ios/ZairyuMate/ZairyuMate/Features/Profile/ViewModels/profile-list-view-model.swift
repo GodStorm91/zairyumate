@@ -31,8 +31,13 @@ class ProfileListViewModel {
 
     // MARK: - Initialization
 
-    init(profileService: ProfileService = ProfileService()) {
+    nonisolated init(profileService: ProfileService) {
         self.profileService = profileService
+    }
+
+    /// Convenience initializer with default service
+    convenience init() {
+        self.init(profileService: ProfileService())
     }
 
     // MARK: - Load Profiles

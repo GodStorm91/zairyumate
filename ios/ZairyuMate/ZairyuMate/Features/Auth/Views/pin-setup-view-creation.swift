@@ -192,7 +192,7 @@ struct PINSetupView: View {
 #Preview("Confirm PIN Step") {
     @Previewable @State var lockManager = AppLockManager()
 
-    PINSetupView(lockManager: lockManager, pin: "123456", isConfirming: true)
+    PINSetupView(lockManager: lockManager)
 }
 
 #Preview("Dark Mode") {

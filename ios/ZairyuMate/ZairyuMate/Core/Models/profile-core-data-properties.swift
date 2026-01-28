@@ -75,7 +75,7 @@ extension Profile {
     /// Type-safe timeline events array
     var timelineEventsArray: [TimelineEvent] {
         let set = timelineEvents as? Set<TimelineEvent> ?? []
-        return set.sorted { $0.eventDate < $1.eventDate }
+        return set.sorted { ($0.eventDate ?? Date.distantPast) < ($1.eventDate ?? Date.distantPast) }
     }
 
     /// Active (incomplete) timeline events

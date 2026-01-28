@@ -30,25 +30,27 @@ public class TimelineEvent: NSManagedObject {
 
     /// Check if event is overdue
     var isOverdue: Bool {
-        guard !isCompleted else { return false }
+        guard !isCompleted, let eventDate = eventDate else { return false }
         return eventDate < Date()
     }
 
     /// Check if event is today
     var isToday: Bool {
+        guard let eventDate = eventDate else { return false }
         let calendar = Calendar.current
         return calendar.isDateInToday(eventDate)
     }
 
     /// Check if event is upcoming (within next 7 days)
     var isUpcoming: Bool {
-        guard !isCompleted && !isOverdue else { return false }
+        guard !isCompleted && !isOverdue, let eventDate = eventDate else { return false }
         let sevenDaysFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date()) ?? Date()
         return eventDate <= sevenDaysFromNow
     }
 
     /// Days until event
     var daysUntilEvent: Int? {
+        guard let eventDate = eventDate else { return nil }
         let calendar = Calendar.current
         let components = calendar.dateComponents([.day], from: Date(), to: eventDate)
         return components.day
@@ -56,6 +58,7 @@ public class TimelineEvent: NSManagedObject {
 
     /// Formatted event date string
     var formattedEventDate: String {
+        guard let eventDate = eventDate else { return "No date" }
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
@@ -64,6 +67,7 @@ public class TimelineEvent: NSManagedObject {
 
     /// Relative date string (e.g., "Tomorrow", "In 3 days")
     var relativeDateString: String {
+        guard let eventDate = eventDate else { return "No date" }
         let calendar = Calendar.current
 
         if calendar.isDateInToday(eventDate) {
@@ -150,7 +154,7 @@ public class TimelineEvent: NSManagedObject {
         isCompleted = false
 
         // Re-schedule notification if needed
-        if eventDate > Date() {
+        if let eventDate = eventDate, eventDate > Date() {
             scheduleNotification()
         }
     }
@@ -192,7 +196,7 @@ public class TimelineEvent: NSManagedObject {
         var dict: [String: Any] = [:]
         dict["id"] = id?.uuidString
         dict["title"] = title
-        dict["eventDate"] = eventDate.timeIntervalSince1970
+        dict["eventDate"] = eventDate?.timeIntervalSince1970
         dict["eventType"] = eventType
         dict["isCompleted"] = isCompleted
         dict["notificationId"] = notificationId

@@ -14,6 +14,9 @@ class PersistenceController {
     /// Shared singleton instance for production use
     static let shared = PersistenceController()
 
+    /// Flag indicating if store loaded successfully
+    private(set) var isStoreLoaded = false
+
     /// Preview instance with in-memory store and mock data for SwiftUI previews
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
@@ -92,31 +95,51 @@ class PersistenceController {
                 fatalError("Failed to retrieve persistent store description")
             }
 
-            // Enable CloudKit sync with private database
+            // Disable CloudKit for simulator - only enable for device with iCloud
+            #if !targetEnvironment(simulator)
+            // Enable CloudKit sync with private database (device only)
             description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
                 containerIdentifier: "iCloud.com.zairyumate.app"
             )
+            #endif
 
             // Enable persistent history tracking for CloudKit sync
             description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
             description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
-            // Enable file protection for security
+            // Enable file protection for security (device only, not supported on simulator)
+            #if !targetEnvironment(simulator)
             description.setOption(FileProtectionType.complete as NSObject, forKey: NSPersistentStoreFileProtectionKey)
-        }
-
-        // Load persistent stores
-        container.loadPersistentStores { storeDescription, error in
-            if let error = error as NSError? {
-                // In production, handle this error gracefully
-                // For now, crash to catch issues during development
-                fatalError("Core Data store failed to load: \(error), \(error.userInfo)")
-            }
-
-            #if DEBUG
-            print("✅ Core Data store loaded: \(storeDescription.url?.lastPathComponent ?? "unknown")")
             #endif
         }
+
+        // Load persistent stores synchronously using semaphore
+        let semaphore = DispatchSemaphore(value: 0)
+        var loadError: NSError?
+
+        container.loadPersistentStores { [weak self] storeDescription, error in
+            if let error = error as NSError? {
+                loadError = error
+                #if DEBUG
+                print("❌ Core Data store failed to load: \(error), \(error.userInfo)")
+                #endif
+            } else {
+                self?.isStoreLoaded = true
+                #if DEBUG
+                print("✅ Core Data store loaded: \(storeDescription.url?.lastPathComponent ?? "unknown")")
+                #endif
+            }
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+
+        // If load failed in release, crash
+        #if !DEBUG
+        if let error = loadError {
+            fatalError("Core Data store failed to load: \(error), \(error.userInfo)")
+        }
+        #endif
 
         // Automatically merge changes from parent context
         container.viewContext.automaticallyMergesChangesFromParent = true

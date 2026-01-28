@@ -116,14 +116,15 @@ struct EventRowView: View {
             iconColor = .gray
         }
 
-        Image(systemName: iconName)
+        return Image(systemName: iconName)
             .font(.system(size: 22))
             .foregroundColor(iconColor)
     }
 
     private var daysUntil: Int {
+        guard let eventDate = event.eventDate else { return 0 }
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.day], from: Date(), to: event.eventDate)
+        let components = calendar.dateComponents([.day], from: Date(), to: eventDate)
         return max(0, components.day ?? 0)
     }
 
@@ -138,16 +139,17 @@ struct EventRowView: View {
     }
 
     private var eventDateDescription: String {
+        guard let eventDate = event.eventDate else { return "No date" }
         let calendar = Calendar.current
-        let isToday = calendar.isDateInToday(event.eventDate)
-        let isTomorrow = calendar.isDateInTomorrow(event.eventDate)
+        let isToday = calendar.isDateInToday(eventDate)
+        let isTomorrow = calendar.isDateInTomorrow(eventDate)
 
         if isToday {
             return "Today"
         } else if isTomorrow {
             return "Tomorrow"
         } else {
-            return event.eventDate.displayFormatted
+            return eventDate.displayFormatted
         }
     }
 }
