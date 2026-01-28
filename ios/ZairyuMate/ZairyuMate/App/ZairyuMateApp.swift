@@ -30,7 +30,7 @@ struct ZairyuMateApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                ContentView()
+                HomeScreenView()
                     .environment(\.managedObjectContext, persistenceController.viewContext)
                     .environment(syncManager)
                     .environment(icloudMonitor)
@@ -65,70 +65,4 @@ struct ZairyuMateApp: App {
             }
         }
     }
-}
-
-struct ContentView: View {
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 24) {
-                // App icon placeholder
-                Image(systemName: "person.text.rectangle")
-                    .font(.system(size: 80))
-                    .foregroundStyle(Color.zmPrimary)
-
-                // Welcome text
-                Text("Zairyu Mate")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(.zmTextPrimary)
-
-                Text("Japanese Visa Application Assistant")
-                    .font(.system(size: 17))
-                    .foregroundColor(.zmTextSecondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
-                // Sample card with gradient
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.zmCardGradientStart, Color.zmCardGradientEnd],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(height: 200)
-                    .overlay(
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Zairyu Card")
-                                .font(.headline)
-                                .foregroundColor(.white)
-
-                            Text("NFC Ready")
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.8))
-
-                            Spacer()
-
-                            HStack {
-                                Image(systemName: "wave.3.right")
-                                    .font(.title)
-                                Text("Tap to scan")
-                                    .font(.subheadline)
-                            }
-                            .foregroundColor(.white)
-                        }
-                        .padding(20)
-                    )
-                    .padding(.horizontal, 24)
-
-                Spacer()
-            }
-            .padding(.top, 60)
-            .background(Color.zmBackground)
-        }
-    }
-}
-
-#Preview {
-    ContentView()
 }
