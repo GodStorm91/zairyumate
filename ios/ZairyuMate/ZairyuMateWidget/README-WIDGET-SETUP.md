@@ -21,13 +21,13 @@ This widget extension displays visa expiry countdown on the home screen and lock
 ## App Groups Configuration
 
 ### Identifier
-`group.com.zairyumate.app`
+`group.com.khanhnguyenhoangviet.zairyumate`
 
 ### Setup in Xcode
 1. Select ZairyuMateWidget target
 2. Signing & Capabilities
 3. Add "App Groups" capability
-4. Enable `group.com.zairyumate.app`
+4. Enable `group.com.khanhnguyenhoangviet.zairyumate`
 
 ### Shared Data
 The main app writes profile data to App Groups using `SharedDataStore`:
@@ -102,7 +102,7 @@ WidgetCenter.shared.reloadAllTimelines()
 
 ### Widget shows "No Profile"
 - Check App Groups entitlement is enabled in both targets
-- Verify `group.com.zairyumate.app` identifier matches
+- Verify `group.com.khanhnguyenhoangviet.zairyumate` identifier matches
 - Ensure active profile exists and has expiry date
 - Check widget data in shared container: `SharedDataStore.loadWidgetData()`
 
