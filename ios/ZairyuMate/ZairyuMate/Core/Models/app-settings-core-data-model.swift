@@ -49,10 +49,15 @@ public class AppSettings: NSManagedObject {
         settings.isPro = false
         settings.lastSyncDate = nil
 
-        do {
-            try context.save()
-        } catch {
-            print("⚠️ Failed to save new AppSettings: \(error)")
+        // Only save if store is loaded
+        if PersistenceController.shared.isStoreLoaded {
+            do {
+                try context.save()
+            } catch {
+                print("⚠️ Failed to save new AppSettings: \(error)")
+            }
+        } else {
+            print("⚠️ Store not loaded - skipping save for new AppSettings")
         }
 
         return settings
