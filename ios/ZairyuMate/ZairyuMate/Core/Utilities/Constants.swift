@@ -39,14 +39,22 @@ enum APIConstants {
 // MARK: - NFC Constants
 
 enum NFCConstants {
-    /// NFC session timeout
+    /// NFC session timeout (seconds)
     static let sessionTimeout: TimeInterval = 60
 
-    /// Zairyu card NFC system code
-    static let zairyuCardSystemCode = "FE00"
+    /// Zairyu card Application Identifier (AID)
+    /// Reference: MOJ Residence Card Specification
+    static let zairyuCardAID = "A0000002471001"
 
-    /// Polling tag types
-    static let pollingTagTypes = ["FeliCa"]
+    /// NFC Alert Messages
+    enum AlertMessage {
+        static let ready = "Hold your iPhone near the Zairyu Card"
+        static let readyJP = "在留カードにiPhoneをかざしてください"
+        static let success = "Card read successfully"
+        static let successJP = "カードの読み取りに成功しました"
+        static let multipleCards = "Multiple cards detected. Please use only one card."
+        static let multipleCardsJP = "複数のカードが検出されました。1枚だけお使いください。"
+    }
 }
 
 // MARK: - Storage Constants

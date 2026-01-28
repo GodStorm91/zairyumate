@@ -34,6 +34,28 @@ extension Color {
 
     /// Secondary text color (#8E8E93 light and dark)
     static let zmTextSecondary = Color("TextSecondary")
+
+    /// Tertiary text color for subtle/disabled text
+    static let zmTextTertiary = Color("TextSecondary").opacity(0.6)
+
+    // MARK: - Surface Colors
+
+    /// Surface color for cards and input fields
+    static let zmSurface = Color(uiColor: .secondarySystemBackground)
+
+    /// Border color for separators and outlines
+    static let zmBorder = Color(uiColor: .separator)
+
+    // MARK: - Status Colors
+
+    /// Error/destructive color (Red)
+    static let zmError = Color.red
+
+    /// Success color (Green)
+    static let zmSuccess = Color.green
+
+    /// Warning color (Orange)
+    static let zmWarning = Color.orange
 }
 
 // MARK: - Color Palette Preview Helper

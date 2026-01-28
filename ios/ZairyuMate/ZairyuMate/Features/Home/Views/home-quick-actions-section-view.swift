@@ -115,20 +115,12 @@ struct RenewFormPlaceholderView: View {
 }
 
 struct NFCScanPlaceholderView: View {
+    @Environment(StoreManager.self) private var storeManager
+
     var body: some View {
-        VStack(spacing: Spacing.lg) {
-            Image(systemName: "wave.3.right.circle.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.green)
-
-            Text("NFC Card Scan")
-                .zmLargeTitleStyle()
-
-            Text("Coming soon in Phase 08")
-                .zmSecondaryBodyStyle()
-        }
-        .navigationTitle("Scan Card")
-        .navigationBarTitleDisplayMode(.inline)
+        NFCScanEntryView(
+            entitlementManager: EntitlementManager(storeManager: storeManager)
+        )
     }
 }
 
