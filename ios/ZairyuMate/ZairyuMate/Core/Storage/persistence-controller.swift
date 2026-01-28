@@ -119,10 +119,14 @@ class PersistenceController: ObservableObject {
                 if let error = error as NSError? {
                     #if DEBUG
                     print("❌ Core Data store failed to load: \(error), \(error.userInfo)")
+                    print("⚠️ Continuing with local-only storage (no CloudKit sync)")
                     #endif
 
-                    // In release, crash after showing error
-                    #if !DEBUG
+                    // In DEBUG: Allow app to continue without CloudKit
+                    // In RELEASE: Crash
+                    #if DEBUG
+                    self?.isStoreLoaded = true
+                    #else
                     fatalError("Core Data store failed to load: \(error), \(error.userInfo)")
                     #endif
                 } else {
