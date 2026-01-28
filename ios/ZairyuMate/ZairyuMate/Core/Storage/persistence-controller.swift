@@ -95,8 +95,9 @@ class PersistenceController: ObservableObject {
                 fatalError("Failed to retrieve persistent store description")
             }
 
-            // Disable CloudKit for simulator - only enable for device with iCloud
-            #if !targetEnvironment(simulator)
+            // TEMPORARILY DISABLED: CloudKit causing crashes until container is registered
+            // TODO: Re-enable after registering iCloud.com.khanhnguyenhoangviet.zairyumate in Apple Developer Portal
+            #if false
             // Enable CloudKit sync with private database (device only)
             description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
                 containerIdentifier: "iCloud.com.khanhnguyenhoangviet.zairyumate"
