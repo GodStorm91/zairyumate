@@ -48,13 +48,17 @@ struct ZairyuMateApp: App {
                     lockManager.appDidEnterBackground()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                    // Get biometric enabled setting from Core Data
+                    // Only access Core Data if store is loaded
+                    guard persistenceController.isStoreLoaded else { return }
+
                     let context = persistenceController.viewContext
                     let settings = AppSettings.shared(in: context)
                     lockManager.appWillEnterForeground(biometricEnabled: settings.biometricEnabled)
                 }
                 .onAppear {
-                    // Check lock state on app launch
+                    // Only access Core Data if store is loaded
+                    guard persistenceController.isStoreLoaded else { return }
+
                     let context = persistenceController.viewContext
                     let settings = AppSettings.shared(in: context)
                     lockManager.checkLockState(biometricEnabled: settings.biometricEnabled)
