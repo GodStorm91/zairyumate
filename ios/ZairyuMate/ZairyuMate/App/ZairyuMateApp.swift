@@ -11,7 +11,9 @@ import SwiftUI
 @main
 struct ZairyuMateApp: App {
     // Initialize Core Data persistence controller
-    @StateObject private var persistenceController = PersistenceController.shared
+    // Using @ObservedObject (not @StateObject) because shared singleton is pre-initialized
+    // This ensures SwiftUI properly observes isStoreLoaded changes during async loading
+    @ObservedObject private var persistenceController = PersistenceController.shared
 
     // Initialize app lock manager
     @State private var lockManager = AppLockManager()
@@ -48,23 +50,32 @@ struct ZairyuMateApp: App {
                     lockManager.appDidEnterBackground()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                    // Only access Core Data if store is loaded
-                    guard persistenceController.isStoreLoaded else { return }
+                    Task {
+                        // Small delay to ensure Core Data is ready after background
+                        try? await Task.sleep(for: .milliseconds(50))
+                        
+                        // Only access Core Data if store is loaded
+                        guard persistenceController.isStoreLoaded else { return }
 
-                    let context = persistenceController.viewContext
-                    let settings = AppSettings.shared(in: context)
-                    lockManager.appWillEnterForeground(biometricEnabled: settings.biometricEnabled)
+                        let context = persistenceController.viewContext
+                        let settings = AppSettings.shared(in: context)
+                        lockManager.appWillEnterForeground(biometricEnabled: settings.biometricEnabled)
+                    }
                 }
                 .onAppear {
-                    // Only access Core Data if store is loaded
-                    guard persistenceController.isStoreLoaded else { return }
-
-                    let context = persistenceController.viewContext
-                    let settings = AppSettings.shared(in: context)
-                    lockManager.checkLockState(biometricEnabled: settings.biometricEnabled)
-
-                    // Sync widget data on app launch
+                    // Small delay to ensure Core Data is fully ready
                     Task {
+                        // Wait a tiny bit for store coordinator to stabilize
+                        try? await Task.sleep(for: .milliseconds(100))
+                        
+                        // Only access Core Data if store is loaded
+                        guard persistenceController.isStoreLoaded else { return }
+
+                        let context = persistenceController.viewContext
+                        let settings = AppSettings.shared(in: context)
+                        lockManager.checkLockState(biometricEnabled: settings.biometricEnabled)
+
+                        // Sync widget data on app launch
                         let profileService = ProfileService(persistenceController: persistenceController)
                         await profileService.syncWidgetOnLaunch()
                     }
