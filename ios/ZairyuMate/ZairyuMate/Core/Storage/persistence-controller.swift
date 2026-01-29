@@ -160,6 +160,17 @@ class PersistenceController: ObservableObject {
     func save(context: NSManagedObjectContext) throws {
         guard context.hasChanges else { return }
 
+        // Verify store coordinator has persistent stores before saving
+        guard let coordinator = context.persistentStoreCoordinator,
+              !coordinator.persistentStores.isEmpty else {
+            #if DEBUG
+            print("⚠️ PersistenceController: Store coordinator not ready - skipping save")
+            #endif
+            // Don't throw error - just skip save for now
+            // This can happen during app initialization race conditions
+            return
+        }
+
         do {
             try context.save()
             #if DEBUG

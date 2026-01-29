@@ -53,10 +53,26 @@ struct NFCScanningAnimationView: View {
                     .font(.zmTitle2)
                     .foregroundColor(.zmTextPrimary)
 
-                Text("Hold your iPhone near the card")
+                Text("Hold the TOP of your iPhone against the card")
                     .font(.zmBody)
                     .foregroundColor(.zmTextSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, Spacing.lg)
             }
+            
+            // Important instruction
+            VStack(spacing: Spacing.xs) {
+                HStack(spacing: Spacing.xs) {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .foregroundColor(.zmPrimary)
+                    Text("Look for the NFC dialog at the bottom of your screen")
+                        .font(.zmCaption)
+                        .foregroundColor(.zmPrimary)
+                }
+                .padding(.horizontal, Spacing.lg)
+                .multilineTextAlignment(.center)
+            }
+            .padding(.top, Spacing.sm)
 
             // Visual card position guide
             VStack(spacing: Spacing.xs) {

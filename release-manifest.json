@@ -1,6 +1,6 @@
 {
-  "version": "2.7.0",
-  "generatedAt": "2026-01-26T15:30:47.454Z",
+  "version": "2.8.1",
+  "generatedAt": "2026-01-27T23:56:19.607Z",
   "files": [
     {
       "path": ".gitignore",
@@ -124,9 +124,9 @@
     },
     {
       "path": "commands/ck-help.md",
-      "checksum": "98416109cb2d2a3c38d3eb2ed2526277e5e0429ed62cad2ba3025f1ab1ff1459",
+      "checksum": "d7329ad07100988918cfc33a7292b6c125b1169125191c375aed62c4a6c87da6",
       "size": 4262,
-      "lastModified": "2026-01-05T12:21:55-05:00"
+      "lastModified": "2026-01-26T22:52:53-05:00"
     },
     {
       "path": "commands/coding-level.md",
@@ -151,12 +151,6 @@
       "checksum": "ab59aee30808de5b2fbfe9fe59e094710c5c0359a75020a1601c6569c2984d47",
       "size": 3326,
       "lastModified": "2026-01-20T15:51:42+07:00"
-    },
-    {
-      "path": "commands/fix.md",
-      "checksum": "20e817df5d125690e60205a55eece2fba342d8f5242457cd9841380c174a51b7",
-      "size": 1529,
-      "lastModified": "2025-11-23T00:53:53+07:00"
     },
     {
       "path": "commands/journal.md",
@@ -190,15 +184,15 @@
     },
     {
       "path": "commands/plan/fast.md",
-      "checksum": "d73dee0242e629fc2a07a321d3a9667070a24802de9c8f3eec85e8cae2565dfa",
+      "checksum": "1aed57583f8a5e9749e72abfad6251238c7f65a5606ce9f1cf4b72b39a011be7",
       "size": 3153,
-      "lastModified": "2026-01-22T20:51:25-05:00"
+      "lastModified": "2026-01-26T22:52:53-05:00"
     },
     {
       "path": "commands/plan/hard.md",
-      "checksum": "6b23c51a90709709e1ddf2e24f3257decb1d693f616d0b238dfd814d52339ab7",
+      "checksum": "7161c118636a688073761afe7f36eba0ee07dbbca02da34cde0334d72029cd5b",
       "size": 4611,
-      "lastModified": "2026-01-22T20:51:25-05:00"
+      "lastModified": "2026-01-26T22:52:53-05:00"
     },
     {
       "path": "commands/plan/parallel.md",
@@ -214,9 +208,9 @@
     },
     {
       "path": "commands/plan/validate.md",
-      "checksum": "811d240c9d1f85545e647913dfac3aac005a4eaf9bcf31a4b27a5552fc1406e5",
+      "checksum": "8ba5c28d046cc6ee942bf70b3832e584e2f1d496f44a0b638866c0ba33bd3bf2",
       "size": 4097,
-      "lastModified": "2026-01-18T16:22:08-05:00"
+      "lastModified": "2026-01-26T22:52:53-05:00"
     },
     {
       "path": "commands/plan.md",
@@ -429,6 +423,12 @@
       "lastModified": "2026-01-20T15:51:35+07:00"
     },
     {
+      "path": "commands-archived/fix.md",
+      "checksum": "20e817df5d125690e60205a55eece2fba342d8f5242457cd9841380c174a51b7",
+      "size": 1529,
+      "lastModified": "2026-01-26T23:34:54-05:00"
+    },
+    {
       "path": "commands-archived/scout/ext.md",
       "checksum": "ec55e908a9194f52b495b1551403c4e9b0d5788fffe63636705f4c2a5fe84c00",
       "size": 2346,
@@ -604,9 +604,9 @@
     },
     {
       "path": "hooks/lib/scout-checker.cjs",
-      "checksum": "8ce50eca1739a2a896fa7162a09ab1bd99d49dfc245450d0928149ffac7e65af",
-      "size": 7233,
-      "lastModified": "2026-01-11T23:12:28+07:00"
+      "checksum": "374d894ce89f439327024d6c1e89600c7bb35bcb3fc730c210c13578300bd2f1",
+      "size": 8009,
+      "lastModified": "2026-01-27T18:54:30-05:00"
     },
     {
       "path": "hooks/lib/transcript-parser.cjs",
@@ -712,9 +712,9 @@
     },
     {
       "path": "hooks/scout-block/path-extractor.cjs",
-      "checksum": "a7d5751bf8a867dae191e83d131fe770aeb73b17e6ff1bcbe8412b0acf406160",
-      "size": 6937,
-      "lastModified": "2025-12-29T12:25:08-05:00"
+      "checksum": "683841800b9b8f736702c8e90f9714cd61feb8a60a341c3a934cc0e9497d05d3",
+      "size": 7867,
+      "lastModified": "2026-01-27T18:54:37-05:00"
     },
     {
       "path": "hooks/scout-block/pattern-matcher.cjs",
@@ -784,9 +784,9 @@
     },
     {
       "path": "hooks/subagent-init.cjs",
-      "checksum": "e834a33a7104a3a2adafc74722fb94bc0b3b27928ada57fcf34d18697f39e5d5",
-      "size": 6315,
-      "lastModified": "2026-01-25T19:09:51+07:00"
+      "checksum": "e1e55a17db75dad84dbf5ade5a9e65557d4a9a39f426da720564dd31e00b8dfa",
+      "size": 6688,
+      "lastModified": "2026-01-27T18:54:30-05:00"
     },
     {
       "path": "hooks/tests/test-ckignore.cjs",
@@ -808,9 +808,9 @@
     },
     {
       "path": "hooks/tests/test-scout-block.cjs",
-      "checksum": "ca6b1eb6ea86e47a2e08d5a366ea9bb97496327f8fe17ffa23c03ba4c3c34a06",
-      "size": 6910,
-      "lastModified": "2026-01-06T21:10:05-05:00"
+      "checksum": "ad73f57acf442429ce3a1673cccac91aadc88cbfa93ece6687feabc695c5082c",
+      "size": 9085,
+      "lastModified": "2026-01-27T18:54:30-05:00"
     },
     {
       "path": "hooks/usage-context-awareness.cjs",
@@ -820,9 +820,9 @@
     },
     {
       "path": "metadata.json",
-      "checksum": "c05be7752c62d7927b439d79d5c18c46a41b1b37f6dddc92d795541e93588568",
-      "size": 1097,
-      "lastModified": "2026-01-26T15:28:39Z"
+      "checksum": "54b120d23d2fe7e8b6e3e85a37c057c5d5abe1ce8dda5c4a8a61579256de8114",
+      "size": 1120,
+      "lastModified": "2026-01-27T23:55:35Z"
     },
     {
       "path": "output-styles/coding-level-0-eli5.md",
@@ -898,9 +898,9 @@
     },
     {
       "path": "scripts/ck-help.py",
-      "checksum": "01d20a1b6b0a35229105c5aef6bd592031da9f571855961958c5c549233c270c",
+      "checksum": "e82fa81fd4b8cae00a7aec9bdc99359e7282f34efe2f5434d506d6df0af7b05d",
       "size": 44230,
-      "lastModified": "2026-01-05T12:45:51-05:00"
+      "lastModified": "2026-01-26T22:52:53-05:00"
     },
     {
       "path": "scripts/commands_data.yaml",
@@ -1042,9 +1042,9 @@
     },
     {
       "path": "skills/ai-artist/SKILL.md",
-      "checksum": "fd0b4c6d3466fd139eb1fff2e1fa062aadc962bc99c8d01e0e3010e81da9f6de",
-      "size": 3307,
-      "lastModified": "2026-01-21T14:04:20+07:00"
+      "checksum": "305787dc283e502534f45fafdb7efdf9dfcbaa833160655380d4217fdd44f984",
+      "size": 3562,
+      "lastModified": "2026-01-27T00:39:42-05:00"
     },
     {
       "path": "skills/ai-artist/data/awesome-prompts.csv",
@@ -1153,6 +1153,12 @@
       "checksum": "571838b5c6f3665ec58438fc9f653cbcabb5b17fc69102b9d2819dddffc5bc99",
       "size": 4693,
       "lastModified": "2025-12-23T23:26:28+07:00"
+    },
+    {
+      "path": "skills/ai-artist/references/validation-workflow.md",
+      "checksum": "53be26fb0ac322ed5654b6a0e3ca495f16fd9471a7e23f0a0a6dbd1771778c2b",
+      "size": 4031,
+      "lastModified": "2026-01-27T00:39:42-05:00"
     },
     {
       "path": "skills/ai-artist/scripts/core.py",
@@ -6214,9 +6220,9 @@
     },
     {
       "path": "statusline.cjs",
-      "checksum": "7356ce832e8f1f2b049c005f6497ae73717f22abbb72655a923f8ea553b81fb3",
-      "size": 20180,
-      "lastModified": "2026-01-25T19:48:46+07:00"
+      "checksum": "855abebfc4f14e920e76380fd62041c055d4834b901b706ae2aad3a6f613d3a7",
+      "size": 20179,
+      "lastModified": "2026-01-26T22:14:09-05:00"
     },
     {
       "path": "statusline.ps1",
@@ -6345,7 +6351,7 @@
     },
     {
       "path": ".opencode/commands/ck-help.md",
-      "checksum": "958c95c498aa6402405c6fc9eb63bb6b66612a873f37dfbb356459c773182c42",
+      "checksum": "ce260ce4f0b06a9aebb5322bc236ca3845d906d7d68ddfc0ab3fb89c94cfe872",
       "size": 4264,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
@@ -6371,12 +6377,6 @@
       "path": ".opencode/commands/docs-update.md",
       "checksum": "5c19dac5dbcadb7977a19879bbe4e73fb53022919ecb0b03e1180f12817ac099",
       "size": 3330,
-      "lastModified": "2026-01-25T17:53:40+07:00"
-    },
-    {
-      "path": ".opencode/commands/fix.md",
-      "checksum": "daca83f1323b821a023e71471992b47a83932b1e97658ed04c2f67c2da6e0e5a",
-      "size": 1507,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
     {
@@ -6411,13 +6411,13 @@
     },
     {
       "path": ".opencode/commands/plan-fast.md",
-      "checksum": "a10f399a5577a25be6a66d01d5e0528520e2e182f879f7e6c40ae3a6e790544d",
+      "checksum": "651e9ba9e7439680ca59cc2c07d39137dcf8336a7cc0b9178f5cf730060251bc",
       "size": 3151,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
     {
       "path": ".opencode/commands/plan-hard.md",
-      "checksum": "104ac84b3c07b3749b0eb2f8559802b6dcc81d45380735c59f3543867e42fb98",
+      "checksum": "e34c331bcf1feb6d847bd7cfbaa7d42dcf3fdd5a0728efd6e9fe7c46d3609261",
       "size": 4609,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
@@ -6435,7 +6435,7 @@
     },
     {
       "path": ".opencode/commands/plan-validate.md",
-      "checksum": "1d90707741e2a0db7e33010390ee97b94aabd4f99895f8612870b86c7451e145",
+      "checksum": "e6327f081d608283f7ceb6bd97dcd8827cfd0bf23d1d9f42862aaa5a59126b4f",
       "size": 4093,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
@@ -6536,8 +6536,8 @@
     },
     {
       "path": ".opencode/plugin/lib/scout-checker.cjs",
-      "checksum": "8ce50eca1739a2a896fa7162a09ab1bd99d49dfc245450d0928149ffac7e65af",
-      "size": 7233,
+      "checksum": "374d894ce89f439327024d6c1e89600c7bb35bcb3fc730c210c13578300bd2f1",
+      "size": 8009,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
     {
@@ -6560,8 +6560,8 @@
     },
     {
       "path": ".opencode/plugin/scout-block/path-extractor.cjs",
-      "checksum": "a7d5751bf8a867dae191e83d131fe770aeb73b17e6ff1bcbe8412b0acf406160",
-      "size": 6937,
+      "checksum": "683841800b9b8f736702c8e90f9714cd61feb8a60a341c3a934cc0e9497d05d3",
+      "size": 7867,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
     {
@@ -6632,7 +6632,7 @@
     },
     {
       "path": ".opencode/scripts/ck-help.py",
-      "checksum": "d1d7d3552a38bd8ea8f263c911d955dce7557801b4fd5d19f7fbddbf3df51506",
+      "checksum": "f5acd1c867d7cdac936eb5b12c37e4fdbab8f6e25e63fae3e452033da17652f0",
       "size": 44276,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
@@ -6743,8 +6743,8 @@
     },
     {
       "path": ".opencode/skills/ai-artist/SKILL.md",
-      "checksum": "fd0b4c6d3466fd139eb1fff2e1fa062aadc962bc99c8d01e0e3010e81da9f6de",
-      "size": 3307,
+      "checksum": "305787dc283e502534f45fafdb7efdf9dfcbaa833160655380d4217fdd44f984",
+      "size": 3562,
       "lastModified": "2026-01-25T17:53:40+07:00"
     },
     {
@@ -6846,6 +6846,11 @@
       "checksum": "571838b5c6f3665ec58438fc9f653cbcabb5b17fc69102b9d2819dddffc5bc99",
       "size": 4693,
       "lastModified": "2026-01-25T17:53:40+07:00"
+    },
+    {
+      "path": ".opencode/skills/ai-artist/references/validation-workflow.md",
+      "checksum": "54af0bb10e740abdb40e76a414a745f3d14a57b153e58ef898cd7830d1d63ddf",
+      "size": 4033
     },
     {
       "path": ".opencode/skills/ai-artist/scripts/core.py",
@@ -10895,7 +10900,7 @@
     },
     {
       "path": "AGENTS.md",
-      "checksum": "5720db9fd0c5525a6ad422c3b0e0548db53c88515977af4fbaf85a6a0a98d5f0",
+      "checksum": "9ab53b745cb417cfc8dae048627094afe359a2dedfd8ad7f7272b911c69ec556",
       "size": 2192,
       "lastModified": "2026-01-18T09:18:05-05:00"
     }

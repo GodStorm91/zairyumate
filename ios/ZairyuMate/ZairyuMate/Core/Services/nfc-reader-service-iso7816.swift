@@ -19,6 +19,9 @@ class NFCReaderService: NSObject {
     private var session: NFCTagReaderSession?
     private var continuation: CheckedContinuation<Data, Error>?
     private var cardNumber: String = ""
+    
+    /// Progress callback for real-time updates
+    var progressHandler: ((String) -> Void)?
 
     /// Check if NFC is available on this device
     static var isAvailable: Bool {
@@ -116,14 +119,19 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
             }
 
             guard case let NFCTag.iso7816(tag) = tags.first! else {
-                session.invalidate(errorMessage: "Unsupported card type")
+                session.invalidate(errorMessage: "Unsupported card type. Please use a valid Zairyu Card.")
                 continuation?.resume(throwing: NFCReaderError.invalidResponse)
                 continuation = nil
                 return
             }
 
             do {
+                // Update alert message to show connection
+                session.alertMessage = NFCConstants.AlertMessage.connecting
                 try await session.connect(to: tags.first!)
+                
+                // Update alert message to show reading
+                session.alertMessage = NFCConstants.AlertMessage.reading
                 let data = try await readCardData(tag: tag, session: session)
 
                 session.alertMessage = NFCConstants.AlertMessage.success
@@ -143,7 +151,21 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
     // MARK: - Card Reading
 
     private func readCardData(tag: NFCISO7816Tag, session: NFCTagReaderSession) async throws -> Data {
+        let startTime = Date()
+        
+        #if DEBUG
+        print("🔵 [NFC] Starting card read at \(startTime)")
+        print("🔵 [NFC] Card identifier: \(tag.identifier.map { String(format: "%02x", $0) }.joined())")
+        print("🔵 [NFC] Card number: \(cardNumber)")
+        #endif
+        
         // Step 1: SELECT application (DF)
+        let step1Start = Date()
+        session.alertMessage = "Selecting card application..."
+        #if DEBUG
+        print("🔵 [NFC] Step 1: Selecting application...")
+        #endif
+        
         let selectDF = try await sendAPDU(
             tag: tag,
             cla: 0x00,
@@ -154,10 +176,23 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
         )
 
         guard selectDF.sw1 == 0x90 && selectDF.sw2 == 0x00 else {
+            #if DEBUG
+            print("🔴 [NFC] Step 1 FAILED: SW1=\(String(format: "%02x", selectDF.sw1)), SW2=\(String(format: "%02x", selectDF.sw2))")
+            #endif
             throw NFCReaderError.invalidResponse
         }
+        
+        #if DEBUG
+        print("🟢 [NFC] Step 1 completed in \(Date().timeIntervalSince(step1Start))s")
+        #endif
 
         // Step 2: Verify card number (PIN)
+        let step2Start = Date()
+        session.alertMessage = "Verifying card number..."
+        #if DEBUG
+        print("🔵 [NFC] Step 2: Verifying card number...")
+        #endif
+        
         // The card number acts as a PIN to unlock the IC chip
         let verifyResult = try await sendAPDU(
             tag: tag,
@@ -169,20 +204,53 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
         )
 
         guard verifyResult.sw1 == 0x90 && verifyResult.sw2 == 0x00 else {
+            #if DEBUG
+            print("🔴 [NFC] Step 2 FAILED: SW1=\(String(format: "%02x", verifyResult.sw1)), SW2=\(String(format: "%02x", verifyResult.sw2))")
+            #endif
             if verifyResult.sw1 == 0x63 {
                 // Wrong PIN / card number
                 throw NFCReaderError.invalidCardNumber
             }
             throw NFCReaderError.securityViolation
         }
+        
+        #if DEBUG
+        print("🟢 [NFC] Step 2 completed in \(Date().timeIntervalSince(step2Start))s")
+        #endif
 
         // Step 3: Read EF01 (Common data - spec version)
-        let ef01 = try await readEF(tag: tag, efId: 0x01)
+        let step3Start = Date()
+        session.alertMessage = "Reading card data (1/3)..."
+        #if DEBUG
+        print("🔵 [NFC] Step 3: Reading EF01...")
+        #endif
+        
+        let ef01 = try await readEF(tag: tag, efId: 0x01, session: session, label: "EF01")
+        
+        #if DEBUG
+        print("🟢 [NFC] Step 3 completed in \(Date().timeIntervalSince(step3Start))s - EF01 size: \(ef01.count) bytes")
+        #endif
 
         // Step 4: Read EF02 (Card type)
-        let ef02 = try await readEF(tag: tag, efId: 0x02)
+        let step4Start = Date()
+        session.alertMessage = "Reading card data (2/3)..."
+        #if DEBUG
+        print("🔵 [NFC] Step 4: Reading EF02...")
+        #endif
+        
+        let ef02 = try await readEF(tag: tag, efId: 0x02, session: session, label: "EF02")
+        
+        #if DEBUG
+        print("🟢 [NFC] Step 4 completed in \(Date().timeIntervalSince(step4Start))s - EF02 size: \(ef02.count) bytes")
+        #endif
 
         // Step 5: SELECT DF1 and read face data
+        let step5Start = Date()
+        session.alertMessage = "Accessing personal data..."
+        #if DEBUG
+        print("🔵 [NFC] Step 5: Selecting DF1...")
+        #endif
+        
         _ = try await sendAPDU(
             tag: tag,
             cla: 0x00,
@@ -191,9 +259,23 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
             p2: 0x0C,
             data: Data([0x00, 0x01])  // DF1
         )
+        
+        #if DEBUG
+        print("🟢 [NFC] Step 5 completed in \(Date().timeIntervalSince(step5Start))s")
+        #endif
 
         // Step 6: Read DF1/EF01 (Card surface image - contains text data)
-        let df1ef01 = try await readEF(tag: tag, efId: 0x01)
+        let step6Start = Date()
+        session.alertMessage = "Reading card data (3/3)..."
+        #if DEBUG
+        print("🔵 [NFC] Step 6: Reading DF1/EF01...")
+        #endif
+        
+        let df1ef01 = try await readEF(tag: tag, efId: 0x01, session: session, label: "DF1/EF01")
+        
+        #if DEBUG
+        print("🟢 [NFC] Step 6 completed in \(Date().timeIntervalSince(step6Start))s - DF1/EF01 size: \(df1ef01.count) bytes")
+        #endif
 
         // Combine all data
         var result = Data()
@@ -204,11 +286,22 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
         result.append(contentsOf: [0x11])  // Marker for DF1/EF01
         result.append(df1ef01)
 
+        let totalTime = Date().timeIntervalSince(startTime)
+        #if DEBUG
+        print("🟢 [NFC] ✅ TOTAL READ TIME: \(totalTime)s - Total data: \(result.count) bytes")
+        #endif
+
         return result
     }
 
-    private func readEF(tag: NFCISO7816Tag, efId: UInt8) async throws -> Data {
+    private func readEF(tag: NFCISO7816Tag, efId: UInt8, session: NFCTagReaderSession, label: String) async throws -> Data {
+        let efStartTime = Date()
+        
         // SELECT EF
+        #if DEBUG
+        print("  📁 [NFC] Selecting \(label) (0x\(String(format: "%02x", efId)))...")
+        #endif
+        
         _ = try await sendAPDU(
             tag: tag,
             cla: 0x00,
@@ -222,8 +315,11 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
         var allData = Data()
         var offset: UInt16 = 0
         let chunkSize: UInt8 = 0xFF
+        var chunkCount = 0
 
         while true {
+            let chunkStartTime = Date()
+            
             let response = try await sendAPDU(
                 tag: tag,
                 cla: 0x00,
@@ -233,9 +329,20 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
                 le: chunkSize
             )
 
+            chunkCount += 1
+            
+            #if DEBUG
+            let chunkTime = Date().timeIntervalSince(chunkStartTime)
+            print("  📦 [NFC] Chunk \(chunkCount) read in \(chunkTime)s - \(response.data.count) bytes - SW: \(String(format: "%02x%02x", response.sw1, response.sw2))")
+            #endif
+
             if response.sw1 == 0x6C {
                 // Wrong Le, retry with correct length
                 let correctLe = response.sw2
+                #if DEBUG
+                print("  ⚠️ [NFC] Wrong Le, retrying with Le=\(correctLe)")
+                #endif
+                
                 let retryResponse = try await sendAPDU(
                     tag: tag,
                     cla: 0x00,
@@ -245,6 +352,10 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
                     le: correctLe
                 )
                 allData.append(retryResponse.data)
+                
+                #if DEBUG
+                print("  ✅ [NFC] Retry successful - \(retryResponse.data.count) bytes")
+                #endif
                 break
             }
 
@@ -252,16 +363,30 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
 
             if response.sw1 == 0x90 && response.sw2 == 0x00 {
                 if response.data.count < Int(chunkSize) {
+                    #if DEBUG
+                    print("  ✅ [NFC] Last chunk received (partial: \(response.data.count) < \(chunkSize))")
+                    #endif
                     break
                 }
                 offset += UInt16(response.data.count)
             } else if response.sw1 == 0x62 || response.sw1 == 0x6B {
                 // End of file or wrong offset
+                #if DEBUG
+                print("  ✅ [NFC] EOF or wrong offset - SW: \(String(format: "%02x%02x", response.sw1, response.sw2))")
+                #endif
                 break
             } else {
+                #if DEBUG
+                print("  ❌ [NFC] Unexpected status - SW: \(String(format: "%02x%02x", response.sw1, response.sw2))")
+                #endif
                 throw NFCReaderError.readFailed(underlying: nil)
             }
         }
+
+        let efTotalTime = Date().timeIntervalSince(efStartTime)
+        #if DEBUG
+        print("  ✅ [NFC] \(label) complete: \(allData.count) bytes in \(efTotalTime)s (\(chunkCount) chunks)")
+        #endif
 
         return allData
     }
@@ -275,6 +400,10 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
         data: Data? = nil,
         le: UInt8? = nil
     ) async throws -> (data: Data, sw1: UInt8, sw2: UInt8) {
+        #if DEBUG
+        let apduStart = Date()
+        #endif
+        
         let apdu = NFCISO7816APDU(
             instructionClass: cla,
             instructionCode: ins,
@@ -285,6 +414,14 @@ extension NFCReaderService: NFCTagReaderSessionDelegate {
         )
 
         let (responseData, sw1, sw2) = try await tag.sendCommand(apdu: apdu)
+        
+        #if DEBUG
+        let apduTime = Date().timeIntervalSince(apduStart)
+        if apduTime > 0.1 {  // Only log slow APDUs
+            print("    ⏱️ [NFC] SLOW APDU: INS=\(String(format: "%02x", ins)) took \(apduTime)s")
+        }
+        #endif
+        
         return (responseData, sw1, sw2)
     }
 }

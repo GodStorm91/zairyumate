@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- NFC Configuration -->
+	
+	<!-- Privacy - NFC Scan Usage Description -->
+	<!-- This message appears when the app first requests NFC access -->
+	<key>NFCReaderUsageDescription</key>
+	<string>Zairyu Mate needs NFC access to read your Zairyu Card IC chip data and automatically fill in your information.</string>
+	
+	<!-- ISO7816 Application Identifiers for NFC Tag Reader Session -->
+	<!-- This is the Application ID (AID) for Japanese Zairyu Cards -->
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>D392F000260100000001</string>
+	</array>
+	
+	<!-- Additional Privacy Permissions -->
+	
+	<!-- Camera access for document scanning (future feature) -->
+	<key>NSCameraUsageDescription</key>
+	<string>Zairyu Mate needs camera access to scan your documents.</string>
+	
+	<!-- Photo library access for saving/loading profile photos -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Zairyu Mate needs access to your photo library to save and load profile photos.</string>
+	
+	<!-- Photo library add-only access (for saving generated PDFs) -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Zairyu Mate needs access to save generated PDF documents to your photo library.</string>
+	
+	<!-- Face ID / Touch ID for app lock -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>Zairyu Mate uses Face ID to securely lock and unlock your visa information.</string>
+	
+	<!-- Notification permissions for visa expiry reminders -->
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Zairyu Mate sends reminders about your visa expiry and renewal steps.</string>
+</dict>
+</plist>

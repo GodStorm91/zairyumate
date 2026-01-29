@@ -37,8 +37,13 @@ class EntitlementManager {
 
     /// Check if NFC scan feature is available
     /// Free: No, Pro: Yes
+    /// DEBUG: Always enabled for testing
     func canUseNFC() -> Bool {
+        #if DEBUG
+        return true // Bypass for testing
+        #else
         return isPro
+        #endif
     }
 
     /// Check if iCloud sync feature is available

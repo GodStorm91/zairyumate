@@ -142,6 +142,7 @@
 		8B7458792F29EEDC00DD1C1B /* zairyu-card-data-model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "zairyu-card-data-model.swift"; sourceTree = "<group>"; };
 		8B74587C2F29EEED00DD1C1B /* nfc-reader-service-iso7816.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "nfc-reader-service-iso7816.swift"; sourceTree = "<group>"; };
 		8B74587D2F29EEED00DD1C1B /* zairyu-card-data-parser-tlv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "zairyu-card-data-parser-tlv.swift"; sourceTree = "<group>"; };
+		8B7458802F2ADF8700DD1C1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90357D4FDAF4A4BCCCC0D712 /* home-card-section-with-countdown-view.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "home-card-section-with-countdown-view.swift"; sourceTree = "<group>"; };
 		9245E2310CF3A8D08ABA04A6 /* profile-form-view-model.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "profile-form-view-model.swift"; sourceTree = "<group>"; };
 		93C369BC1D5A5EF12B73E996 /* profile-list-view-model.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "profile-list-view-model.swift"; sourceTree = "<group>"; };
@@ -472,6 +473,7 @@
 				CC3A044457D8BA78A5E1F780 /* persistence-controller.swift */,
 				0811D969DEFA2CE1633C199D /* shared-data-store.swift */,
 				B2663DF4FB2BD273016EDA85 /* ZairyuMateDataModel.xcdatamodeld */,
+				8B7458802F2ADF8700DD1C1B /* Info.plist */,
 			);
 			path = Storage;
 			sourceTree = "<group>";

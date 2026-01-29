@@ -89,6 +89,32 @@ class HomeViewModel {
             // Fetch active profile
             activeProfile = try await profileService.fetchActive()
 
+            #if DEBUG
+            // Seed test profile if empty (for testing) - AFTER fetching to avoid timing issues
+            if profiles.isEmpty && activeProfile == nil {
+                print("🌱 Seeding test profile for DEBUG testing...")
+                do {
+                    let testProfile = try await profileService.create(
+                        name: "Test User",
+                        nameKatakana: "テスト ユーザー",
+                        dateOfBirth: Calendar.current.date(byAdding: .year, value: -30, to: Date()) ?? Date(),
+                        nationality: "US",
+                        address: "Tokyo, Japan",
+                        cardNumber: "AB12 3456 78CD",
+                        cardExpiry: Calendar.current.date(byAdding: .year, value: 1, to: Date()) ?? Date(),
+                        visaType: "Engineer"
+                    )
+                    // Set as active
+                    try await profileService.setActive(testProfile)
+                    profiles = try await profileService.fetchAll()
+                    activeProfile = testProfile
+                    print("✅ Test profile created and activated")
+                } catch {
+                    print("⚠️ Failed to seed test profile: \(error)")
+                }
+            }
+            #endif
+
             // Fetch upcoming events for active profile
             if let profile = activeProfile {
                 let allEvents = try await timelineService.fetch(for: profile)

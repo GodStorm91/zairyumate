@@ -25,7 +25,26 @@
       "Bash(xcrun simctl erase:*)",
       "Bash(xcrun simctl shutdown:*)",
       "Bash(xcrun xctrace:*)",
-      "Bash(security find-identity:*)"
+      "Bash(security find-identity:*)",
+      "Bash(xcrun devicectl:*)",
+      "Bash(security find-certificate:*)",
+      "Bash(openssl x509:*)",
+      "Bash(for view in \"HomeCardSectionView\" \"HomeActionsSectionView\" \"UpcomingEventsSectionView\" \"ProfileSelectorView\" \"HomeViewModel\")",
+      "Bash(do echo \"=== $view ===\")",
+      "Bash(done)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebSearch",
+      "Bash(node /Users/khanhnguyen/project/zairyumate/.claude/scripts/set-active-plan.cjs:*)",
+      "Bash(ruby -e:*)",
+      "Bash(log show --predicate 'process == \"\"\"\"ZairyuMate\"\"\"\"' --style syslog --last 2m)",
+      "Bash(xcrun simctl spawn:*)",
+      "Bash(log show --predicate 'process == \"\"\"\"ZairyuMate\"\"\"\"' --last 5m --debug --info)",
+      "Bash(/usr/bin/log show:*)",
+      "Bash(plutil:*)",
+      "Bash(codesign:*)",
+      "Bash(stores\" error and app freeze.\n\nChanges:\n- Made PersistenceController ObservableObject with @Published isStoreLoaded\n- Removed blocking semaphore.wait\\(\\) - now loads asynchronously\n- Added loading screen while stores initialize \\(critical for CloudKit on device\\)\n- Updated ZairyuMateApp to show loading screen until isStoreLoaded = true\n\nWhy this fixes the freeze:\n- CloudKit authentication on device takes 5-30 seconds\n- Previous code blocked main thread with semaphore during authentication\n- App now shows responsive loading screen instead of freezing\n- Simulator works because CloudKit is disabled \\(#if !targetEnvironment\\(simulator\\)\\)\n\nThis follows iOS best practices for async Core Data initialization.\nEOF\n\\)\")"
     ]
   }
 }

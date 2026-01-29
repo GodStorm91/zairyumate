@@ -13,6 +13,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/session-init.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-init.cjs"
           }
         ]
       }
@@ -24,6 +28,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/subagent-init.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/subagent-init.cjs"
           }
         ]
       }
@@ -41,6 +49,19 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dev-rules-reminder.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/usage-context-awareness.cjs",
+            "timeout": 30
+          }
+        ]
       }
     ],
     "PreToolUse": [
@@ -50,6 +71,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/descriptive-name.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/descriptive-name.cjs"
           }
         ]
       },
@@ -63,6 +88,14 @@
           {
             "type": "command",
             "command": "node .claude/hooks/privacy-block.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/scout-block.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/privacy-block.cjs"
           }
         ]
       }
@@ -74,6 +107,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/post-edit-simplify-reminder.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-edit-simplify-reminder.cjs"
           }
         ]
       },
@@ -83,6 +120,10 @@
           {
             "type": "command",
             "command": "node .claude/hooks/usage-context-awareness.cjs"
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/usage-context-awareness.cjs"
           }
         ]
       }

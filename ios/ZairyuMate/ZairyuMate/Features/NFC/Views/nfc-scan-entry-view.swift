@@ -98,6 +98,26 @@ struct NFCScanEntryView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, Spacing.xl)
             }
+            
+            // Scanning tip
+            HStack(spacing: Spacing.xs) {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundColor(.zmPrimary)
+                    .font(.zmCaption)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("After tapping 'Start Scan':")
+                        .font(.zmCaption)
+                        .foregroundColor(.zmTextSecondary)
+                        .fontWeight(.semibold)
+                    Text("A system dialog will appear at the bottom. Hold the TOP of your iPhone against the card's IC chip (back of card).")
+                        .font(.zmCaption)
+                        .foregroundColor(.zmTextSecondary)
+                }
+            }
+            .padding(Spacing.md)
+            .background(Color.zmPrimary.opacity(0.1))
+            .cornerRadius(CornerRadius.md)
+            .padding(.horizontal, Spacing.screenHorizontal)
 
             // Card number input
             VStack(spacing: Spacing.sm) {

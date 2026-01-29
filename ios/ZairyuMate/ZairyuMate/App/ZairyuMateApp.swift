@@ -24,6 +24,9 @@ struct ZairyuMateApp: App {
     // Initialize iCloud status monitor
     @State private var icloudMonitor = iCloudStatusMonitor()
 
+    // Initialize StoreKit manager for in-app purchases
+    @State private var storeManager = StoreManager()
+
     init() {
         let controller = PersistenceController.shared
         _syncManager = State(initialValue: CloudSyncManager(container: controller.container))
@@ -38,6 +41,7 @@ struct ZairyuMateApp: App {
                         .environment(\.managedObjectContext, persistenceController.viewContext)
                         .environment(syncManager)
                         .environment(icloudMonitor)
+                        .environment(storeManager)
 
                     // Lock screen overlay
                     if lockManager.isLocked {

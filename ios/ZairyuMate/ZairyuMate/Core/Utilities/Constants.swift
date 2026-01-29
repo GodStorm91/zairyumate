@@ -48,12 +48,14 @@ enum NFCConstants {
 
     /// NFC Alert Messages
     enum AlertMessage {
-        static let ready = "Hold your iPhone near the Zairyu Card"
-        static let readyJP = "在留カードにiPhoneをかざしてください"
-        static let success = "Card read successfully"
+        static let ready = "Hold the TOP of your iPhone against the back of the Zairyu Card"
+        static let readyJP = "iPhoneの上部を在留カードの裏面に当ててください"
+        static let success = "Card read successfully!"
         static let successJP = "カードの読み取りに成功しました"
         static let multipleCards = "Multiple cards detected. Please use only one card."
         static let multipleCardsJP = "複数のカードが検出されました。1枚だけお使いください。"
+        static let connecting = "Connecting to card..."
+        static let reading = "Reading card data..."
     }
 }
 

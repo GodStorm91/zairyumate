@@ -17,19 +17,8 @@ public class AppSettings: NSManagedObject {
     /// Fetch or create the singleton settings instance
     /// - Parameter context: Managed object context
     /// - Returns: The app settings instance
+    /// - Important: Should only be called after Core Data store is loaded
     static func shared(in context: NSManagedObjectContext) -> AppSettings {
-        // Check if store is loaded before attempting fetch/create
-        guard PersistenceController.shared.isStoreLoaded else {
-            print("⚠️ CoreData store not loaded - returning unsaved settings")
-            let settings = AppSettings(context: context)
-            settings.id = UUID()
-            settings.biometricEnabled = false
-            settings.selectedLanguage = "vi"
-            settings.isPro = false
-            settings.lastSyncDate = nil
-            return settings
-        }
-
         let request = fetchRequest()
         request.fetchLimit = 1
 
@@ -49,15 +38,27 @@ public class AppSettings: NSManagedObject {
         settings.isPro = false
         settings.lastSyncDate = nil
 
-        // Only save if store is loaded
-        if PersistenceController.shared.isStoreLoaded {
-            do {
-                try context.save()
-            } catch {
-                print("⚠️ Failed to save new AppSettings: \(error)")
-            }
-        } else {
-            print("⚠️ Store not loaded - skipping save for new AppSettings")
+        // Verify store coordinator has persistent stores before saving
+        guard let coordinator = context.persistentStoreCoordinator,
+              !coordinator.persistentStores.isEmpty else {
+            #if DEBUG
+            print("⚠️ AppSettings: Store coordinator not ready - returning unsaved settings")
+            #endif
+            return settings
+        }
+
+        // Save with error handling
+        do {
+            try context.save()
+            #if DEBUG
+            print("✅ AppSettings: Created and saved new settings instance")
+            #endif
+        } catch {
+            #if DEBUG
+            print("⚠️ Failed to save new AppSettings: \(error)")
+            print("⚠️ This is expected in preview/test contexts")
+            #endif
+            // Don't crash - return unsaved settings for preview contexts
         }
 
         return settings
